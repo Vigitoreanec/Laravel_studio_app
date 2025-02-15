@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable(false);
+            $table->float('price')->nullable(false);
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('master_id')->constrained();
+
             // CONSTRAINT - ключевое слово, которое указывает, что в данной секции описывается ограничение, 
             // которое налагается на данные в таблице, и которое будет проверяться подсистемой контроля целостности 
             // и непротиворечивости данных сервера, что в свою очередь не позволит внести или изменить данные в таблице так, 
@@ -22,6 +25,7 @@ return new class extends Migration
             // данных в таблице она будет считаться повреждённой. 
             // Сразу после этого ключевого слова указывается уникальный идентификатор (имя) этого ограничения 
             // (он может быть пропущен, тогда сервер сгенерирует его автоматически).
+
             $table->timestamps();
         });
     }

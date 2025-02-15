@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\CategoriesTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ class Master extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(CategoriesTableSeeder::class);
     }
 
     public function services()
