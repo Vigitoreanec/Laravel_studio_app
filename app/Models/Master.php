@@ -10,7 +10,7 @@ class Master extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'image'];
+    protected $fillable = ['name', 'description', 'email', 'image'];
 
     public function category()
     {

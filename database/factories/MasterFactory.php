@@ -18,8 +18,10 @@ class MasterFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'description' => fake()->realTextBetween(100, 200),
             'email' => fake()->unique()->safeEmail(),
-
+            'image' => fake()
+                ->imageUrl(640, 480, 'people', true, false)
         ];
     }
 }

@@ -1,0 +1,13 @@
+.hero-section {
+    background: url('https://example.com/header-bg.jpg') no-repeat center center;
+    background-size: cover;
+    height: 60vh;
+}
+
+.service-card {
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
