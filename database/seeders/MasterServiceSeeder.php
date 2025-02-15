@@ -17,16 +17,21 @@ class MasterServiceSeeder extends Seeder
     {
         $masters = Master::all();
         $services = Service::all();
-        
-        
+        // Для каждого мастера добавляем уникальные услуги
         $masters->each(function ($master) use ($services) {
-            $randomServices = $services->random(
-                min(5, $services->count()) // Берем не больше чем есть
-            );
+            $existingServices = $master->services()->pluck('service_id')->toArray();
 
-            $master->services()->attach(
-                $randomServices->pluck('id')->toArray()
-            );
+            $availableServices = $services->whereNotIn('id', $existingServices);
+
+            if ($availableServices->isNotEmpty()) {
+                $randomServices = $availableServices->random(
+                    min(2, $availableServices->count())
+                );
+
+                $master->services()->attach(
+                    $randomServices->pluck('id')->toArray()
+                );
+            }
         });
     }
 }
