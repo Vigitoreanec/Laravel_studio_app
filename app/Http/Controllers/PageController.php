@@ -10,10 +10,11 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
     // Метод главной страницы
-    public function home()
+    public function index()
     {
         $masters = Master::with(['services.category'])->get();
         // Получаем уникальные категории из всех услуг всех мастеров
+        
         $categories = Category::whereHas(
             'services.master',
             function ($query) {
@@ -22,7 +23,7 @@ class PageController extends Controller
         )->get();
         //dd($categories);
         
-        return view('home', [
+        return view('index', [
             'masters' => $masters,
             'categories' => $categories
         ]);

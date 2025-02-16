@@ -20,7 +20,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
+        $clients = Client::factory(5)->create();
+        $masters = Master::factory()->count(5)->create();
+        
+        foreach ($clients as $client) {
+            User::factory()->create([
+                'name' => $client->name,
+                'email' => $client->email,
+                'password' => Hash::make('password' . $client->id), 
+            ]);
+        }
+
+        foreach ($masters as $master) {
+            User::factory()->create([
+                'name' => $master->name,
+                'email' => $master->email,
+                'password' => Hash::make('password' . $master->id), // Хешируем пароль
+            ]);
+        }
 
         User::factory()->create([
             'name' => 'sergey',
@@ -28,17 +45,18 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'is_admin' => true
         ]);
+        
         $this->call(CategoriesTableSeeder::class);
 
         $this->call([
             //CategoriesTableSeeder::class,
-            Client::factory(10)->create(),
-            Master::factory(5)->create(),
+            //Master::factory(5)->create(),
+            
             Service::factory(10)->create(),
             Meeting::factory(20)->create(),
             Comment::factory(5)->create(),
 
         ]);
-        $this->call(MasterServiceSeeder::class);
+        //$this->call(MasterServiceSeeder::class);
     }
 }

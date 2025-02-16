@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Meeting extends Model
 {
     use HasFactory;
-    protected $fillable = ['client_id', 'master_id', 'service_id', 'datetime'];
+    protected $fillable = ['client_id', 'master_id', 'service_id', 'datetime', 'status'];
 
     public function client()
     {

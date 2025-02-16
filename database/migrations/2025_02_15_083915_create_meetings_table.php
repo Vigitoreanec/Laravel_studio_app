@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('master_id')->constrained();
             $table->foreignId('service_id')->constrained();
             $table->dateTime('datetime');
+            $table->string('status');
             $table->timestamps();
         });
     }

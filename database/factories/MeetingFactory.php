@@ -23,7 +23,8 @@ class MeetingFactory extends Factory
             'datetime' => $this->faker->dateTimeBetween('now', '+1 month'),
             'client_id' => Client::inRandomOrder()->first()->id,
             'master_id' => Master::inRandomOrder()->first()->id,
-            'service_id' => Service::inRandomOrder()->first()->id
+            'service_id' => Service::inRandomOrder()->first()->id,
+            'status' => 'pending'
         ];
     }
 }
