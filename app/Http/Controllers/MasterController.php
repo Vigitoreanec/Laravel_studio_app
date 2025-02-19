@@ -143,11 +143,16 @@ class MasterController extends Controller
 
     public function destroyMaster(Master $master)
     {
-        //dd($master->image);
+        //dd($master->meetings());
+
         if ($master->image) {
             Storage::disk('public')->delete($master->image);
         }
+        $master->services()->delete();
+        $master->meetings()->delete();
+
         $master->delete();
+        
         return redirect()->route('master.management')->with('success', 'Мастер успешно удален.');
     }
 
