@@ -14,9 +14,13 @@
                                 <h5 class="card-title">{{ $service->category->name }}</h5>
                                 <p class="card-text">{{ $service->description }}</p>
                                 <p class="card-text">{{ $service->price }} руб.</p>
-                                @auth
-                                    <a href="{{ route('meetings.create', ['master' => $master, 'service' => $service]) }}"
-                                        class="btn btn-success">Записаться</a>
+                                @Auth
+                                    @if(auth()->user()->role === 'user')
+                                        <a href="{{ route('meetings.create', ['master' => $master, 'service' => $service]) }}"
+                                            class="btn btn-success">Записаться</a>
+                                    @else
+                                        <p>Для записи необходимо войти как пользователь.</p>
+                                    @endif
                                 @else
                                     <p>Для записи необходимо <a href="{{ route('login') }}">войти</a>.</p>
                                 @endauth

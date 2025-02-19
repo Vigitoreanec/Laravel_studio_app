@@ -20,7 +20,7 @@
                 <label for="description">Описание</label>
                 <textarea name="description" id="description"
                     class="form-control @error('description') is-invalid @enderror" autofocus
-                    value="{{ old('description')}}" required></textarea>
+                    value="{{ old('description')}}"></textarea>
             </div>
             @error('description')
                 <span class="invalid-feedback" role="alert">
@@ -31,14 +31,29 @@
             <div class="form-group">
                 <label for="email">Почта</label>
                 <input type="text" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
-                    autofocus value="{{ old('email')}}" required>
+                    autofocus value="{{ old('email')}} @nailstudio.com " required>
             </div>
             @error('email')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
-
+            <div class="form-group">
+                <label for="category_id">Доступные услуги</label>
+                
+                <select name="category_id" id="category_id" class="form-control">
+                    <option value="">Выберите услугу</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ $category->id  ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="form-group">
+                    <label for="price">Цена</label>
+                    <input type="number" name="price" id="price" class="form-control" step="100" placeholder="Введите цену">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="image">Фото</label><br />
                 <input type="file" name="image" id="image" class="form-control-file">

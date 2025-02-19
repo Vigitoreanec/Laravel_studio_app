@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Master;
 use App\Models\Meeting;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,7 +36,9 @@ class MasterController extends Controller
 
     public function create()
     {
-        return view('masters.create');
+        $categories = Category::all();
+        //dd($categories);
+        return view('masters.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -43,23 +47,37 @@ class MasterController extends Controller
         $request->validate([
             'name' => 'required|string|min:5|max:255',
             'description' => 'required|string',
-            'email' => 'required|string|min:15|max:150',
+            'email' => 'required|string|min:5|max:150',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categoryId' => 'nullable|exists:category,id',
+            'price' => 'nullable|numeric|min:1000|max:5000'
+            
         ]);
+
+        //dd($category);
+        //dd($request);
 
         $photoPath = '';
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('images', 'public');
         }
 
-        // Создание мастера
+        // Создание
         $master = Master::create([
             'name' => $request->name,
             'description' => $request->description,
-            'email' => $request->email . '@nailstudio.com',
+            'email' => $request->email,
             'image' => $photoPath,
         ]);
-        //dd($master);
+        //dd($request);
+        //dd($master->id);
+        $ser = Service::create([
+            'title' => fake()->realText(),
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'master_id' => $master->id
+        ]);
+        //dd($ser);
         return redirect()->route('master.management');
     }
 
@@ -109,7 +127,7 @@ class MasterController extends Controller
                 Storage::disk('public')->delete($photoPath);
             }
             $photoPath = 'images/' . $request->file('image')->hashName();
-            $request->file('images')->storeAs('public/images', $photoPath); 
+            $request->file('images')->storeAs('public/images', $photoPath);
             //dd($photoPath);
         }
 
