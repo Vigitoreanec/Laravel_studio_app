@@ -21,7 +21,7 @@ class ServiceFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'price' => $this->faker->randomFloat(0, 1500, 3500),
+            'price' => $this->faker->numberBetween(1500, 3500),
             'category_id' => Category::inRandomOrder()->first()->id,
             'master_id' => Master::inRandomOrder()->first()->id
         ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Master;
 use App\Models\Meeting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MasterController extends Controller
 {
@@ -18,35 +19,70 @@ class MasterController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-
-
-    /**
      * Display the specified resource.
      */
+
     public function show(Master $master)
     {
         $services = $master->services;
         return view('masters.show', compact('master', 'services'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+
+    public function create()
+    {
+        return view('masters.create');
+    }
+
+    public function store(Request $request)
+    {
+        // Валидация данных
+        $request->validate([
+            'name' => 'required|string|min:5|max:255',
+            'description' => 'required|string',
+            'email' => 'required|string|min:15|max:150',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $photoPath = '';
+        if ($request->hasFile('image')) {
+            $photoPath = $request->file('image')->store('images', 'public');
+        }
+
+        // Создание мастера
+        $master = Master::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'email' => $request->email . '@nailstudio.com',
+            'image' => $photoPath,
+        ]);
+        //dd($master);
+        return redirect()->route('master.management');
+    }
+
+    public function edit(Master $master)
+    {
+        return view('masters.edit', compact('master'));
+    }
+
     public function management()
     {
-
-        return view('master.management');
+        $masters = Master::all();
+        //dd($masters);
+        return view('master.management', compact('masters'));
     }
 
     public function meetings()
     {
-        $meetings = Meeting::where('master_id', auth()->id())->get();
+        $meetings = Meeting::where('master_id', '5')->get();
+        //$masters = Master::all();
+        //dd($meetings);
         return view('master.meetings', compact('meetings'));
     }
 
-    public function edit(Meeting $meeting)
-    {
-        return view('master.meetings.edit', compact('meeting'));
-    }
 
     public function update(Request $request, Meeting $meeting)
     {
@@ -55,7 +91,46 @@ class MasterController extends Controller
         ]);
 
         $meeting->update($request->only('status'));
-        return redirect()->route('master.meetings')->with('success', 'Запись обновлена!');
+        return redirect()->route('master.manegement')->with('success', 'Запись обновлена!');
+    }
+
+    public function updateMaster(Request $request, Master $master)
+    {
+        $request->validate([
+            'name' => 'required|string|min:5|max:255',
+            'description' => 'required|string',
+            'email' => 'required|string|min:15|max:150',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $photoPath = $master->image;
+        if ($request->hasFile('image')) {
+            if ($photoPath) {
+                Storage::disk('public')->delete($photoPath);
+            }
+            $photoPath = 'images/' . $request->file('image')->hashName();
+            $request->file('images')->storeAs('public/images', $photoPath); 
+            //dd($photoPath);
+        }
+
+        $master->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'email' => $request->email,
+            'image' => $photoPath,
+        ]);
+        //dd($master);
+        return redirect()->route('master.management')->with('success', 'Мастер успешно обновлен.');
+    }
+
+    public function destroyMaster(Master $master)
+    {
+        //dd($master->image);
+        if ($master->image) {
+            Storage::disk('public')->delete($master->image);
+        }
+        $master->delete();
+        return redirect()->route('master.management')->with('success', 'Мастер успешно удален.');
     }
 
     public function destroy(Meeting $meeting)

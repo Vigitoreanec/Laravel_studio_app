@@ -16,13 +16,19 @@ class MasterFactory extends Factory
      */
     public function definition(): array
     {
+        static $photoIndex = 0;
+        $photos = glob(public_path('images/masters/*.{jpg,png,gif,webp,jpeg}'), GLOB_BRACE);
+        // $randomPhoto = basename($photos[array_rand($photos)]);
+        $photo = basename($photos[$photoIndex & count($photos)]);
+        $photoIndex++;
+
         return [
             'name' => fake()->name(),
             //'description' => fake()->realTextBetween(100, 200),
             'description' => fake()->sentence(),
             'email' => $this->faker->unique()->userName . '@nailstudio.com',
-            'image' => fake()
-                ->imageUrl(640, 480, 'people', true, false),
+            'image' => 'images/masters/' . $photo,
+            //'image' => $this->faker->imageUrl(640, 480, 'people', true, true),
             //'password' => bcrypt('password'), // Пароль по умолчанию
         ];
     }

@@ -11,3 +11,30 @@
 .service-card:hover {
     transform: translateY(-10px);
 }
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.master-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.master-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-more {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-more:hover {
+    background-color: #0056b3;
+    color: #fff;
+}

@@ -19,7 +19,7 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => $this->faker->paragraph(),
+            'content' => $this->faker->realText(),
             'client_id' => Client::inRandomOrder()->first()->id,
             'commentable_id' => Master::inRandomOrder()->first()->id,
             'commentable_type' => Master::class

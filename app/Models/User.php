@@ -43,4 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function is_admin($role)
+    {
+        // Проверяем, есть ли у пользователя роль, переданная в параметре $role
+        return $this->is_admin === $role;
+    }
 }

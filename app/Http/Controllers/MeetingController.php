@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Master;
 use App\Models\Meeting;
 use App\Models\Service;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class MeetingController extends Controller
@@ -23,7 +25,7 @@ class MeetingController extends Controller
      */
     public function create(Master $master, Service $service)
     {
-        
+
         return view('meetings.create', compact('master', 'service'));
     }
 
@@ -34,14 +36,19 @@ class MeetingController extends Controller
     {
         $request->validate([
             'datetime' => 'required|date',
+            'client_id' => 'requered',
+            'master_id' => 'requered'
         ]);
 
-        Meeting::create([
-            'client_id' => auth()->id(),
+        $idClient = Auth()->user()->id;
+        //dd($idClient);
+
+        Meeting::updateOrCreate([
+            'client_id' => $idClient,
             'master_id' => $master->id,
             'service_id' => $service->id,
             'datetime' => $request->datetime,
-            'status' => 'pending',
+            'status' => 'pending'
         ]);
 
         return redirect()->route('index')->with('success', 'Запись успешно создана!');

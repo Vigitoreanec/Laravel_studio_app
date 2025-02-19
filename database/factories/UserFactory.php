@@ -17,8 +17,8 @@ class UserFactory extends Factory
      * The current password being used by the factory.
      */
     protected static ?string $password;
-    protected $master = Master::class;
-    protected $client = Client::class;
+    // protected $master = Master::class;
+    // protected $client = Client::class;
     /**
      * Define the model's default state.
      *

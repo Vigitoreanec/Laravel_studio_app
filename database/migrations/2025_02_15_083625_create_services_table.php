@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable(false);
-            $table->float('price')->nullable(false);
+            $table->integer('price')->nullable(false);
+            //$table->string('is_admin')->always('user');
             $table->foreignId('category_id')->constrained();
             $table->foreignId('master_id')->constrained();
-
             // CONSTRAINT - ключевое слово, которое указывает, что в данной секции описывается ограничение, 
             // которое налагается на данные в таблице, и которое будет проверяться подсистемой контроля целостности 
             // и непротиворечивости данных сервера, что в свою очередь не позволит внести или изменить данные в таблице так, 

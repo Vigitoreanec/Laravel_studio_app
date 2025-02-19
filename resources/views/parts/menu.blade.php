@@ -7,11 +7,20 @@
                     <a class="nav-link @if (Route::is('masters.index')) active @endif"
                         href="{{ route('masters.index') }}">Мастера</a>
                 </li>
-                @if(Auth::user()->is_admin)
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('master.management') }}">Панель мастера</a>
-                </li>
+                {{-- @if(Auth::user()->is_admin) --}}
+                @guest
+                @else
+                @if(Auth::user()->is_admin('admin') || Auth::user()->is_admin('master'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('master.management') }}">Панель мастера</a>
+                    </li>
+                @endif
                 @endauth
+                <form class="d-flex" action="{{ route('categories.search') }}" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Поиск по категориям"
+                        aria-label="Search" minlength="3" required>
+                    <button class="btn btn-outline-success" type="submit">Поиск</button>
+                </form>
             </ul>
             <ul class="navbar-nav ms-auto">
                 @auth

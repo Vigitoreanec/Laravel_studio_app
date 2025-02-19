@@ -35,7 +35,8 @@ class DatabaseSeeder extends Seeder
             User::factory()->create([
                 'name' => $master->name,
                 'email' => $master->email,
-                'password' => Hash::make('password' . $master->id), // Хешируем пароль
+                'password' => Hash::make('password' . $master->id), 
+                'is_admin' => 'master'
             ]);
         }
 
@@ -43,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'sergey',
             'email' => 'mail@mail.ru',
             'password' => Hash::make('password'),
-            'is_admin' => true
+            'is_admin' => 'admin'
         ]);
         
         $this->call(CategoriesTableSeeder::class);
