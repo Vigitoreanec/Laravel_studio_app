@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Редактирование записи</h1>
-    <form method="POST" action="{{ route('master.update', $meeting->id) }}">
+    <form method="POST" action="{{ route('master.meetings.update', $meeting->id) }}">
         @csrf
         @method('PUT')
         <div class="form-group">

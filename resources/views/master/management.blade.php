@@ -3,6 +3,7 @@
 
 @section('content')
     <div class="container">
+        @include('parts.message')
         <h1>Панель мастера</h1>
         <div class="row">
             <div class="col-md-4">
@@ -82,7 +83,7 @@
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('master.meetings') }}" class="btn btn-primary">Управление записями</a>
+                            <a href="{{ route('master.meetings', Auth::user()->name) }}" class="btn btn-primary">Управление записями</a>
                         @endif
                     </div>
                 </div>

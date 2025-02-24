@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+        @include('parts.message')
         <h1>Запись к мастеру {{ $master->name }}</h1>
 
         <form action="{{ route('meetings.store', ['master' => $master, 'service' => $service->id]) }}" method="POST">

@@ -4,20 +4,20 @@
     height: 60vh;
 }
 
-.service-card {
+/* .service-card {
     transition: transform 0.3s;
-}
+} */
 
-.service-card:hover {
+/* .service-card:hover {
     transform: translateY(-10px);
-}
+} */
 
 .card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 

@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+        @include('parts.message')
         <h1>Управление записями</h1>
         <table class="table table-bordered">
             <thead>
@@ -19,13 +20,13 @@
                     <tr>
                         <td>{{ $meeting->id }}</td>
                         <td>{{ $meeting->client->name }}</td>
-                        <td>{{ $meeting->service->name }}</td>
-                        <td>{{ $meeting->appointment_time }}</td>
+                        <td>{{ $meeting->service->title }}</td>
+                        <td>{{ $meeting->datetime }}</td>
                         <td>{{ $meeting->status }}</td>
                         <td>
-                            <a href="{{ route('master.meetings.edit', $meeting->id) }}"
+                            <a href="{{ route('master.editMeeting', $meeting) }}"
                                 class="btn btn-warning btn-sm">Редактировать</a>
-                            <form action="{{ route('master.meetings.destroy', $meeting->id) }}" method="POST"
+                            <form action="{{ route('master.meetings.destroy', $meeting) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')

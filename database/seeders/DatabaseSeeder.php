@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
             
             Service::factory(10)->create(),
             Meeting::factory(20)->create(),
-            Comment::factory(5)->create(),
+            Comment::factory(35)->create(),
 
         ]);
         //$this->call(MasterServiceSeeder::class);

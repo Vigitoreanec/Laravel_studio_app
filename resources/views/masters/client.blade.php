@@ -25,6 +25,22 @@
                     @endforeach
                 </tbody>
             </table>
+            @guest
+            @else
+                @if(Auth::user()->is_admin)
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5>Скачать расписание</h5>
+                        </div>
+                        <div class="card-body">
+
+                            <a href="{{ route('masters.export.txt', $master) }}" class="btn btn-secondary">
+                                Скачать TXT
+                            </a>
+                        </div>
+                    </div>
+                @endif
+            @endguest
         @else
             <div class="mt-4 alert alert-info">
                 У этого мастера пока нет клиентов

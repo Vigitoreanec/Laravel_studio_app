@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('app.css')
+
 @section('content')
     <div class="container">
         <h1>Результаты поиска по запросу: {{ $query ?? 'Все категории' }}</h1>

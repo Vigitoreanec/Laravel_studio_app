@@ -26,4 +26,9 @@ class Master extends Model
     {
         return $this->hasMany(Meeting::class);
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }
