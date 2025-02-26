@@ -6,8 +6,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\MeetingController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,8 +67,31 @@ Route::middleware(['auth'])->prefix('master')->group(function () {
     //Route::put('/master/meetings/{meeting}/confirm', [MasterController::class, 'confirmMeetings'])->name('master.meetings.confirm');
 });
 
-
-
-
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $githubUser = Socialite::driver('github')->user();
+
+    //dd($githubUser);
+    $user = User::where('name', $githubUser->getName())->first();
+
+    if (!$user) {
+        $user = User::updateOrCreate([
+            'name' => $githubUser->name,
+            'email' => fake()->unique()->safeEmail(),
+            'password' => 'password',
+            'is_admin' => 'user',
+            //'remember_token' => $githubUser->token,
+            //'github_token' => $githubUser->token,
+            //'github_refresh_token' => $githubUser->refreshToken,
+        ]);
+    }
+    //dd($user);
+    Auth::login($user);
+
+    return redirect('/');
+});

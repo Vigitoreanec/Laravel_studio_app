@@ -56,8 +56,11 @@
                                 </div>
                             </div>
 
+
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
+                                    <a href="/auth/redirect"><img src="git.png" width="50"
+                                            style="position: relative; left: -1em;"></a>
                                     <button type="submit" class="btn btn-primary">
                                         {{ __('Login') }}
                                     </button>
