@@ -4,7 +4,8 @@ let button = document.querySelectorAll('.changeMeeting');
 button.forEach((elem) => {
     elem.addEventListener('click', () => {
         let id = elem.getAttribute('data-id');
-        axios.post('/master/meetings/${id}/update/meeting')
+        console.log(id);
+        axios.put(`/master/meetings/${id}/update/meeting`)
             .then(response => {
                 document.getElementById('statusMeeting').textContent = response.data.status;
                 alert('Статус успешно изменен!');

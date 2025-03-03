@@ -130,7 +130,7 @@ class MasterController extends Controller
         return redirect()->route('master.management')->with('success', 'Запись обновлена!');
     }
 
-    public function updateMeeting(Request $request, Meeting $meeting)
+    public function updateMeeting(Meeting $meeting)
     {
         $currentStatus = $meeting->status;
         $newStatus = 'pending'; // По умолчанию

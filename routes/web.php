@@ -60,7 +60,7 @@ Route::middleware(['auth'])->prefix('master')->group(function () {
     Route::get('/management', [MasterController::class, 'management'])->name('master.management');
     Route::get('/meetings/{meeting}', [MasterController::class, 'meetings'])->name('master.meetings');
 
-    Route::put('/meetings/update/{meeting}/meeting', [MasterController::class, 'updateMeeting'])
+    Route::put('/meetings/{meeting}/update/meeting', [MasterController::class, 'updateMeeting'])
         ->name('master.meetings.updateMeeting');
 
     Route::get('/meetings/edit/{meeting}', [MasterController::class, 'editMeeting'])->name('master.editMeeting');
