@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('master.meetings', Auth::user()->name) }}" class="btn btn-primary">Управление записями</a>
+                            <a href="{{ route('master.meetings', Auth::user()->id) }}" class="btn btn-primary">Управление записями</a>
                         @endif
                     </div>
                 </div>

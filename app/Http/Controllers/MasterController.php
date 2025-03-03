@@ -109,10 +109,11 @@ class MasterController extends Controller
         return view('master.management', compact('masters'));
     }
 
-    public function meetings(string $name)
+    public function meetings(int $name)
     {
         //dd($name);
-        $master = Master::where('name', $name)->first();
+        $user = User::where('id', $name)->first();
+        $master = Master::where('name', $user->name)->first();
         //dd($master);
 
         $meetings = $master->meetings()->get();
