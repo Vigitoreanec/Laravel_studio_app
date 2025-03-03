@@ -4,14 +4,15 @@
     <div class="container">
         @include('parts.message')
         <h1>Редактирование записи</h1>
-        <p class="card-text">
-
-            <strong>Статус:</strong> <span id="statusMeeting">{{ $meeting->status }}</span><br>
-
-        </p>
+       
         <form method="POST" action="{{ route('master.meetings.updateMeeting', $meeting->id) }}">
             @csrf
             @method('PUT')
+            <p class="card-text">
+
+                <strong>Статус:</strong> <span id="statusMeeting">{{ $meeting->status }}</span><br>
+    
+            </p>
             {{-- //1
             <div class="form-group">
                 <label for="status">Статус</label>
@@ -32,23 +33,9 @@
 
     </div>
 @endsection
-<script>
+{{-- <script>
 
-    let button = document.querySelectorAll('.changeMeeting');
-    button.forEach((elem) => {
-        elem.addEventListener('click', () => {
-            let id = elem.getAttribute('data-id');
-            axios.post('/master/meetings/${id}/update/meeting')
-                .then(response => {
-                    document.getElementById('statusMeeting').textContent = response.data.newStatus;
-                    alert('Статус успешно изменен!');
-                })
-                .catch(error => {
-                    console.error('Ошибка:', error);
-                    alert('Произошла ошибка при изменении.');
-                });
-        })
-    })
+    
 
 
     // document.querySelectorAll('chengeMeeting').forEach(button => {
@@ -67,4 +54,4 @@
     //             });
     //     });
     // });
-</script>
+</script> --}}

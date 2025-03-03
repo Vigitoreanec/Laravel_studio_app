@@ -130,31 +130,36 @@ class MasterController extends Controller
         return redirect()->route('master.management')->with('success', 'Запись обновлена!');
     }
 
-    public function updateMeeting(Meeting $meeting)
+    public function updateMeeting(Request $request, Meeting $meeting)
     {
+        $currentStatus = $meeting->status;
+        $newStatus = 'pending'; // По умолчанию
+        if ($currentStatus) {
 
-        if ($meeting) {
-
-            $status = $meeting->status;
+            $newStatus = $meeting->status;
             //dd($status);
-            switch ($status) {
+            switch ($newStatus) {
                 case 'pending':
-                    $status = 'confirmed';
+                    $newStatus = 'confirmed';
                     break;
                 case 'confirmed':
-                    $status = 'cancelled';
+                    $newStatus = 'cancelled';
                     break;
                 case 'cancelled':
-                    $status = 'pending';
+                    $newStatus = 'pending';
                     break;
             }
 
-            $meeting->update(['status' => $status]);
+            $meeting->update([
+                'status' => $newStatus
+            ]);
+            //$meeting->update(['status' => $newStatus]);
             //$meeting->update($request->only('status'));
             //dd($meeting);
+
             return response()->json([
                 'success' => true,
-                'newStatus' => $status,
+                'status' => $newStatus,
                 'message' => 'Статус успешно изменен.'
             ]);
         }
