@@ -13,6 +13,7 @@
                     <th>Дата и время</th>
                     <th>Статус</th>
                     <th>Действия</th>
+                    <th>Изменить </th>
                 </tr>
             </thead>
             <tbody>
@@ -22,7 +23,7 @@
                         <td>{{ $meeting->client->name }}</td>
                         <td>{{ $meeting->service->title }}</td>
                         <td>{{ $meeting->datetime }}</td>
-                        <td>{{ $meeting->status }}</td>
+                        <td id="statusMeeting">{{ $meeting->status }}</td>
                         <td>
                             <a href="{{ route('master.editMeeting', $meeting) }}"
                                 class="btn btn-warning btn-sm">Редактировать</a>
@@ -33,7 +34,10 @@
                                 <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
                             </form>
                         </td>
-
+                        <td><button data-id="{{$meeting->id}}" class="btn btn-warning btn-sm changeMeeting">
+                                Изменить статус
+                            </button>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
