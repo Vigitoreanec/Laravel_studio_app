@@ -32,11 +32,11 @@ Route::middleware(['auth'])->prefix('masters')->group(function () {
 
     Route::get('/', [MasterController::class, 'index'])->name('masters.index');
     Route::get('/create', [MasterController::class, 'create'])->name('masters.create');
-    Route::post('/', [MasterController::class, 'store'])->name('masters.store');
+    Route::post('/store', [MasterController::class, 'store'])->name('masters.store');
 
     Route::get('/{master}/clients', [MasterController::class, 'clients'])->name('masters.clients');
-    Route::get('/{master}/edit', [MasterController::class, 'edit'])->name('masters.edit');
-    Route::put('/{master}/meetings', [MasterController::class, 'updateMaster'])->name('masters.update');
+    Route::get('/edit/{master}', [MasterController::class, 'edit'])->name('masters.edit');
+    Route::put('/update/{master}', [MasterController::class, 'updateMaster'])->name('masters.updateMaster');
     Route::delete('/{master}', [MasterController::class, 'destroyMaster'])->name('masters.destroy');
 
     Route::post('/{master}', [CommentController::class, 'store'])->name('comments.store');
@@ -60,8 +60,12 @@ Route::middleware(['auth'])->prefix('master')->group(function () {
     Route::get('/management', [MasterController::class, 'management'])->name('master.management');
     Route::get('/meetings/{meeting}', [MasterController::class, 'meetings'])->name('master.meetings');
 
+    Route::put('/meetings/update/{meeting}/meeting', [MasterController::class, 'updateMeeting'])
+        ->name('master.meetings.updateMeeting');
+
     Route::get('/meetings/edit/{meeting}', [MasterController::class, 'editMeeting'])->name('master.editMeeting');
     Route::put('/meetings/{meeting}/update', [MasterController::class, 'update'])->name('master.meetings.update');
+    
     Route::delete('/meetings/{meeting}', [MasterController::class, 'destroy'])->name('master.meetings.destroy');
 
     //Route::put('/master/meetings/{meeting}/confirm', [MasterController::class, 'confirmMeetings'])->name('master.meetings.confirm');
@@ -85,12 +89,12 @@ Route::get('/auth/callback', function () {
             'email' => fake()->unique()->safeEmail(),
             'password' => 'password',
             'is_admin' => 'user',
-            //'remember_token' => $githubUser->token,
+            'remember_token' => $githubUser->token,
             //'github_token' => $githubUser->token,
             //'github_refresh_token' => $githubUser->refreshToken,
         ]);
     }
-    //dd($user);
+    dd($user);
     Auth::login($user);
 
     return redirect('/');

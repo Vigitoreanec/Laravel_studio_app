@@ -33,9 +33,29 @@
                                 <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
                             </form>
                         </td>
+
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 @endsection
+
+<script>
+    document.querySelectorAll(`chengeMeeting`).forEach(button => {
+        button.addEventListener('click', () => {
+            alert('Статус успешно изменен!');
+            // const id = this.getAttribute('data-id');
+
+            // axios.put('/master/meetings/${id}/update/meeting')
+            //     .then(response => {
+            //         document.getElementById(`status-${meetingId}`).textContent = response.data.newStatus;
+            //         alert('Статус успешно изменен!');
+            //     })
+            //     .catch(error => {
+            //         console.error('Ошибка:', error);
+            //         alert('Произошла ошибка при изменении.');
+            //     });
+        });
+    });
+</script>

@@ -8,6 +8,7 @@ use App\Models\Master;
 use App\Models\Meeting;
 use App\Models\Service;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -52,11 +53,11 @@ class MasterController extends Controller
         // Валидация данных
         $request->validate([
             'name' => 'required|string|min:5|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|min:5|max:255',
             'email' => 'required|string|min:5|max:150',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'categoryId' => 'nullable|exists:category,id',
-            'price' => 'nullable|numeric|min:1000|max:5000'
+            'price' => 'required|numeric|min:1000|max:5000'
 
         ]);
 
@@ -67,24 +68,28 @@ class MasterController extends Controller
         if ($request->hasFile('image')) {
             $photoPath = $request->file('image')->store('images', 'public');
         }
+        try {
 
-        // Создание
-        $master = Master::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'email' => $request->email,
-            'image' => $photoPath,
-        ]);
-        //dd($request);
-        //dd($master->id);
-        $ser = Service::create([
-            'title' => fake()->realText(),
-            'price' => $request->price,
-            'category_id' => $request->category_id,
-            'master_id' => $master->id
-        ]);
+            // Создание
+            $master = Master::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'email' => $request->email,
+                'image' => $photoPath,
+            ]);
+            //dd($request);
+            //dd($master->id);
+            Service::create([
+                'title' => fake()->realText(),
+                'price' => $request->price,
+                'category_id' => $request->category_id,
+                'master_id' => $master->id
+            ]);
+        } catch (Exception $e) {
+            return redirect()->route('masters.create')->with('error', 'Ошибка добавления мастера' . $e->getMessage());
+        }
         //dd($ser);
-        return redirect()->route('master.management');
+        return redirect()->route('master.management')->with('success', 'Мастер успешно создан.');
     }
 
     public function edit(Master $master)
@@ -115,8 +120,6 @@ class MasterController extends Controller
         //dd($meetings);
         return view('master.meetings', compact('meetings'));
     }
-
-
     public function update(Request $request, Meeting $meeting)
     {
         $request->validate([
@@ -127,6 +130,40 @@ class MasterController extends Controller
         return redirect()->route('master.management')->with('success', 'Запись обновлена!');
     }
 
+    public function updateMeeting(Meeting $meeting)
+    {
+
+        if ($meeting) {
+
+            $status = $meeting->status;
+            //dd($status);
+            switch ($status) {
+                case 'pending':
+                    $status = 'confirmed';
+                    break;
+                case 'confirmed':
+                    $status = 'cancelled';
+                    break;
+                case 'cancelled':
+                    $status = 'pending';
+                    break;
+            }
+
+            $meeting->update(['status' => $status]);
+            //$meeting->update($request->only('status'));
+            //dd($meeting);
+            return response()->json([
+                'success' => true,
+                'newStatus' => $status,
+                'message' => 'Статус успешно изменен.'
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Статус не найден.'
+        ], 404);
+    }
+
     public function updateMaster(Request $request, Master $master)
     {
         $request->validate([
@@ -135,9 +172,9 @@ class MasterController extends Controller
             'email' => 'required|string|min:15|max:150',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
-
-        $photoPath = $master->image;
+        $photoPath = "";
         if ($request->hasFile('image')) {
+            $photoPath = $master->image;
             if ($photoPath) {
                 Storage::disk('public')->delete($photoPath);
             }
@@ -145,13 +182,16 @@ class MasterController extends Controller
             $request->file('images')->storeAs('public/images', $photoPath);
             //dd($photoPath);
         }
-
-        $master->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'email' => $request->email,
-            'image' => $photoPath,
-        ]);
+        try {
+            $master->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'email' => $request->email,
+                'image' => $photoPath,
+            ]);
+        } catch (Exception $e) {
+            return back()->with('error', 'Ошибка изменения мастера' . $e->getMessage());
+        }
         //dd($master);
         return redirect()->route('master.management')->with('success', 'Мастер успешно обновлен.');
     }
@@ -177,12 +217,12 @@ class MasterController extends Controller
         return redirect()->back()->with('success', 'Запись удалена!');
     }
 
-    public function confirmMeetings(Meeting $meeting)
-    {
-        //dd($meeting);
-        $meeting->update(['status' => 'confirmed']);
-        return redirect()->back()->with('success', 'Запись подтверждена!');
-    }
+    // public function confirmMeetings(Meeting $meeting)
+    // {
+    //     //dd($meeting);
+    //     $meeting->update(['status' => 'confirmed']);
+    //     return redirect()->back()->with('success', 'Запись подтверждена!');
+    // }
 
     public function clients(Master $master)
     {
@@ -218,7 +258,6 @@ class MasterController extends Controller
             'Content-Type' => 'text/plain',
             'Content-Disposition' => "attachment; filename=$filename",
         ];
-
 
         return Response::make($content, 200, $headers);
     }
